@@ -62,14 +62,10 @@ public class ListTextFile {
     public static void addToList() throws IOException {
         String addThis = JOptionPane.showInputDialog("What would you like to add to the list?");
         
+        String newFile = (currentList() + addThis);
+        
         PrintWriter fileOut = new PrintWriter(new FileWriter("list.txt"));
-        
-        String currentList = currentList();
-        
-        System.out.println(currentList);
-        
-        fileOut.println(currentList + addThis);
-        
+        fileOut.println(newFile);
         fileOut.close();
     }
     
@@ -85,7 +81,6 @@ public class ListTextFile {
         } catch (IOException ioe) {
             System.err.println("File Crashed!");
         }
-        System.out.println(currentList);
         return currentList;
     }
     
