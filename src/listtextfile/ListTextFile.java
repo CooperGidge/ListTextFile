@@ -99,7 +99,22 @@ public class ListTextFile {
         // Get the String the user wants to add to the list
         String addThis = JOptionPane.showInputDialog("What would you like to add to the list?");
         // Get the position in the list the user wants to add the String to
-        String toHere = JOptionPane.showInputDialog("What number do you want to add the item to?");
+        String toHere = JOptionPane.showInputDialog("What number do you want to add the item to?\n"
+            + "Answer must be between 1 and " + (items.size()+1) + ", inclusive.");
+        // Check that the input is an integer
+        try {
+            // Check - if it is an integer, do nothing.
+            Integer.parseInt(toHere); 
+        } catch (NumberFormatException e) { 
+            // If it is not an integer, break from the method
+            JOptionPane.showMessageDialog(null, "That's not a number!");
+            return;
+        }
+        // Now that we are sure the input is an integer, check it is within the bounaries
+        if ( Integer.parseInt(toHere) <= 0 || Integer.parseInt(toHere) > (items.size()+1) ) {
+            JOptionPane.showMessageDialog(null, "That's outside of the boundaries!");
+            return;
+        }
         // Add the String to the position in the list
         // (subtract 1 because arrays start from 0)
         items.add(Integer.parseInt(toHere)-1, addThis);
@@ -113,7 +128,22 @@ public class ListTextFile {
      */
     public static void removeFromList() throws IOException {
         // Get the position number of the item the user wants to remove from the list
-        String toHere = JOptionPane.showInputDialog("What number do you want to remove from the list?");
+        String toHere = JOptionPane.showInputDialog("What number do you want to remove from the list?\n"
+            + "Answer must be between 1 and " + (items.size()) + ", inclusive.");
+        // Check that the input is an integer
+        try { 
+            // Check - if it is an integer, do nothing.
+            Integer.parseInt(toHere); 
+        } catch (NumberFormatException e) { 
+            // If it is not an integer, break from the method
+            JOptionPane.showMessageDialog(null, "That's not a number!");
+            return;
+        }
+        // Now that we are sure the input is an integer, check it is within the bounaries
+        if ( Integer.parseInt(toHere) <= 0 || Integer.parseInt(toHere) > (items.size()) ) {
+            JOptionPane.showMessageDialog(null, "That's outside of the boundaries!");
+            return;
+        }
         // Remove that item from the list
         // (subtract 1 because arrays start from 0)
         items.remove(Integer.parseInt(toHere)-1);
