@@ -1,5 +1,6 @@
 /*
  * ListTextFile.java
+ * TODO: Make it so all options except for add an item are disabled if the list is empty
  */
 package listtextfile;
 
@@ -98,6 +99,10 @@ public class ListTextFile {
         for (int i = 0; i < items.size(); i++) {
             System.out.println((i+1) + ". " + items.get(i));
         }
+        // If the list is empty, tell the user to add an item
+        if (items.isEmpty()) {
+            System.out.println("The list is empty. Add the first item!");
+        }
         // Add a blank line after the list to make room for whatever is printed next
         System.out.println("");
     }
@@ -166,6 +171,11 @@ public class ListTextFile {
         if (!checkIfInt(fromHere)) {
             return;
         }
+        // Now that we are sure the inputs are integers, check that both are within the boundaries
+        if ( Integer.parseInt(fromHere) <= 0 || Integer.parseInt(fromHere) > (items.size()) ) {
+            JOptionPane.showMessageDialog(null, "That's outside of the boundaries!");
+            return;
+        }
         String toHere = JOptionPane.showInputDialog("To what item number do you want to move it to?\n"
             + "Answer must be between 1 and " + (items.size()) + ", inclusive.");
         // Check that the input is an integer
@@ -175,10 +185,8 @@ public class ListTextFile {
         }
         // Now that we are sure the inputs are integers, check that both are within the boundaries
         if ( Integer.parseInt(toHere) <= 0 || Integer.parseInt(toHere) > (items.size()) ) {
-            if ( Integer.parseInt(fromHere) <= 0 || Integer.parseInt(fromHere) > (items.size()) ) {
-                JOptionPane.showMessageDialog(null, "That's outside of the boundaries!");
-                return;
-            }
+            JOptionPane.showMessageDialog(null, "That's outside of the boundaries!");
+            return;
         }
         // (Remember: subtracting 1 because arrays start from 0)
         // Temporarily store the item we want to move
@@ -229,7 +237,7 @@ public class ListTextFile {
      * @return boolean returns true if the String can be parsed as an int, false otherwise
      */
     public static boolean checkIfInt(String n) {
-        try { 
+        try {
             // Check - if it is an integer, do nothing so the return true below runs.
             Integer.parseInt(n); 
         } catch (NumberFormatException e) { 
