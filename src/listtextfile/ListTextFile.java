@@ -225,8 +225,8 @@ public class ListTextFile {
     
     /**
      * Checks if a String can be an integer
-     * @param String n String to check is a number
-     * @return boolean returns true if the String can be parses as an int, false otherwise
+     * @param String n String to check if it is an integer
+     * @return boolean returns true if the String can be parsed as an int, false otherwise
      */
     public static boolean checkIfInt(String n) {
         try { 
