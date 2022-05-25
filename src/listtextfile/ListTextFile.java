@@ -29,12 +29,20 @@ public class ListTextFile {
         // Create a String to hold the option the user chooses
         String menuOption = "";
         // Unless the user chooses option 4, don't end the program
-        while (!menuOption.equals("4")) {
+        while (!menuOption.equals("5")) {
             menuOption = JOptionPane.showInputDialog("Choose from the following menu:\n\n"
                 + "1 - Print list\n"
                 + "2 - Add to list\n"
                 + "3 - Remove from list\n"
-                + "4 - Exit");
+                + "4 - Move list item\n"
+                + "5 - Exit");
+            // Check if the option provided is null. If it is, end the program
+            // The option will be null if the user presses "Cancel" or the x in the corner
+            // The reason we end the program is to prevent errors from the
+            // if statements below this (null is not a String)
+            if (menuOption == null) {
+                return;
+            }
             // Call the respective method for what the user chose to do
             if (menuOption.equals("1")) {
                 printList();
@@ -44,6 +52,9 @@ public class ListTextFile {
             }
             if (menuOption.equals("3")) {
                 removeFromList();
+            }
+            if (menuOption.equals("4")) {
+                moveListItem();
             }
         }
     }
@@ -102,15 +113,11 @@ public class ListTextFile {
         String toHere = JOptionPane.showInputDialog("What number do you want to add the item to?\n"
             + "Answer must be between 1 and " + (items.size()+1) + ", inclusive.");
         // Check that the input is an integer
-        try {
-            // Check - if it is an integer, do nothing.
-            Integer.parseInt(toHere); 
-        } catch (NumberFormatException e) { 
-            // If it is not an integer, break from the method
-            JOptionPane.showMessageDialog(null, "That's not a number!");
+        // Break from the method if it is not
+        if (!checkIfInt(toHere)) {
             return;
         }
-        // Now that we are sure the input is an integer, check it is within the bounaries
+        // Now that we are sure the input is an integer, check it is within the boundaries
         if ( Integer.parseInt(toHere) <= 0 || Integer.parseInt(toHere) > (items.size()+1) ) {
             JOptionPane.showMessageDialog(null, "That's outside of the boundaries!");
             return;
@@ -131,15 +138,11 @@ public class ListTextFile {
         String toHere = JOptionPane.showInputDialog("What number do you want to remove from the list?\n"
             + "Answer must be between 1 and " + (items.size()) + ", inclusive.");
         // Check that the input is an integer
-        try { 
-            // Check - if it is an integer, do nothing.
-            Integer.parseInt(toHere); 
-        } catch (NumberFormatException e) { 
-            // If it is not an integer, break from the method
-            JOptionPane.showMessageDialog(null, "That's not a number!");
+        // Break from the method if it is not
+        if (!checkIfInt(toHere)) {
             return;
         }
-        // Now that we are sure the input is an integer, check it is within the bounaries
+        // Now that we are sure the input is an integer, check it is within the boundaries
         if ( Integer.parseInt(toHere) <= 0 || Integer.parseInt(toHere) > (items.size()) ) {
             JOptionPane.showMessageDialog(null, "That's outside of the boundaries!");
             return;
@@ -147,6 +150,43 @@ public class ListTextFile {
         // Remove that item from the list
         // (subtract 1 because arrays start from 0)
         items.remove(Integer.parseInt(toHere)-1);
+        // Save the ArrayList to the file
+        saveFile();
+    }
+    
+    /**
+     * Moves the position of an item in the list
+     * @throws IOException
+     */
+    public static void moveListItem() throws IOException {
+        String fromHere = JOptionPane.showInputDialog("What item number do you want to move?\n"
+            + "Answer must be between 1 and " + (items.size()) + ", inclusive.");
+        // Check that the input is an integer
+        // Break from the method if it is not
+        if (!checkIfInt(fromHere)) {
+            return;
+        }
+        String toHere = JOptionPane.showInputDialog("To what item number do you want to move it to?\n"
+            + "Answer must be between 1 and " + (items.size()) + ", inclusive.");
+        // Check that the input is an integer
+        // Break from the method if it is not
+        if (!checkIfInt(toHere)) {
+            return;
+        }
+        // Now that we are sure the inputs are integers, check that both are within the boundaries
+        if ( Integer.parseInt(toHere) <= 0 || Integer.parseInt(toHere) > (items.size()) ) {
+            if ( Integer.parseInt(fromHere) <= 0 || Integer.parseInt(fromHere) > (items.size()) ) {
+                JOptionPane.showMessageDialog(null, "That's outside of the boundaries!");
+                return;
+            }
+        }
+        // (Remember: subtracting 1 because arrays start from 0)
+        // Temporarily store the item we want to move
+        String temp = items.get(Integer.parseInt(fromHere)-1);
+        // Remove the original location of the item
+        items.remove(Integer.parseInt(fromHere)-1);
+        // Add the item stored in the String temp to the position specified by the user
+        items.add(Integer.parseInt(toHere)-1, temp);
         // Save the ArrayList to the file
         saveFile();
     }
@@ -181,6 +221,24 @@ public class ListTextFile {
         fileOut.close();
         // Rebuild the ArrayList using the new file
         buildList();
+    }
+    
+    /**
+     * Checks if a String can be an integer
+     * @param String n String to check is a number
+     * @return boolean returns true if the String can be parses as an int, false otherwise
+     */
+    public static boolean checkIfInt(String n) {
+        try { 
+            // Check - if it is an integer, do nothing so the return true below runs.
+            Integer.parseInt(n); 
+        } catch (NumberFormatException e) { 
+            // If it is not an integer, return false
+            JOptionPane.showMessageDialog(null, "That's not a number!");
+            return false;
+        }
+        // If the method doesn't return false, return true
+        return true;
     }
     
 }
