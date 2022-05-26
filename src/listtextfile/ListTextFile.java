@@ -1,6 +1,5 @@
 /*
  * ListTextFile.java
- * TODO: Make it so all options except for add an item are disabled if the list is empty
  */
 package listtextfile;
 
@@ -112,8 +111,18 @@ public class ListTextFile {
      * @throws IOException
      */
     public static void addToList() throws IOException {
+        // Print the list so the user sees the list items and numbers
+        printList();
         // Get the String the user wants to add to the list
         String addThis = JOptionPane.showInputDialog("What would you like to add to the list?");
+        // Check that what the user inputted something
+        if (addThis.equals("")) {
+            // If the user did not input anything, break from the method
+            // because you don't want to add nothing to the list
+            // but spaces are fair game (they are something)
+            JOptionPane.showMessageDialog(null, "You can't add nothing to the list!");
+            return;
+        }
         // Get the position in the list the user wants to add the String to
         String toHere = JOptionPane.showInputDialog("What number do you want to add the item to?\n"
             + "Answer must be between 1 and " + (items.size()+1) + ", inclusive.");
@@ -132,6 +141,8 @@ public class ListTextFile {
         items.add(Integer.parseInt(toHere)-1, addThis);
         // Save the ArrayList to the file
         saveFile();
+        // Print the new list
+        printList();
     }
     
     /**
@@ -139,6 +150,15 @@ public class ListTextFile {
      * @throws IOException
      */
     public static void removeFromList() throws IOException {
+        // Print the list so the user sees the list items and numbers
+        printList();
+        // Check if the list is empty
+        if (items.isEmpty()) {
+            // If it is, break from the method
+            // because there is nothing to remove
+            JOptionPane.showMessageDialog(null, "You need at least 1 item in the list.");
+            return;
+        }
         // Get the position number of the item the user wants to remove from the list
         String toHere = JOptionPane.showInputDialog("What number do you want to remove from the list?\n"
             + "Answer must be between 1 and " + (items.size()) + ", inclusive.");
@@ -157,6 +177,8 @@ public class ListTextFile {
         items.remove(Integer.parseInt(toHere)-1);
         // Save the ArrayList to the file
         saveFile();
+        // Print the new list
+        printList();
     }
     
     /**
@@ -164,6 +186,16 @@ public class ListTextFile {
      * @throws IOException
      */
     public static void moveListItem() throws IOException {
+        // Print the list so the user sees the list items and numbers
+        printList();
+        // Check if the list is empty
+        if (items.isEmpty()) {
+            // If it is, break from the method
+            // because there is nothing to move
+            JOptionPane.showMessageDialog(null, "You need at least 1 item in the list.");
+            return;
+        }
+        // Get the position number of the item the user wants to move
         String fromHere = JOptionPane.showInputDialog("What item number do you want to move?\n"
             + "Answer must be between 1 and " + (items.size()) + ", inclusive.");
         // Check that the input is an integer
@@ -171,11 +203,12 @@ public class ListTextFile {
         if (!checkIfInt(fromHere)) {
             return;
         }
-        // Now that we are sure the inputs are integers, check that both are within the boundaries
+        // Check that it is within the boundaries
         if ( Integer.parseInt(fromHere) <= 0 || Integer.parseInt(fromHere) > (items.size()) ) {
             JOptionPane.showMessageDialog(null, "That's outside of the boundaries!");
             return;
         }
+        // Get the position number to move the item to
         String toHere = JOptionPane.showInputDialog("To what item number do you want to move it to?\n"
             + "Answer must be between 1 and " + (items.size()) + ", inclusive.");
         // Check that the input is an integer
@@ -183,7 +216,7 @@ public class ListTextFile {
         if (!checkIfInt(toHere)) {
             return;
         }
-        // Now that we are sure the inputs are integers, check that both are within the boundaries
+        // Check that it is within the boundaries
         if ( Integer.parseInt(toHere) <= 0 || Integer.parseInt(toHere) > (items.size()) ) {
             JOptionPane.showMessageDialog(null, "That's outside of the boundaries!");
             return;
@@ -197,6 +230,8 @@ public class ListTextFile {
         items.add(Integer.parseInt(toHere)-1, temp);
         // Save the ArrayList to the file
         saveFile();
+        // Print the new list
+        printList();
     }
     
     /**
@@ -233,7 +268,7 @@ public class ListTextFile {
     
     /**
      * Checks if a String can be an integer
-     * @param String n String to check if it is an integer
+     * @param n String to check if it is an integer
      * @return boolean returns true if the String can be parsed as an int, false otherwise
      */
     public static boolean checkIfInt(String n) {
